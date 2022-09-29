@@ -1,0 +1,29 @@
+openapi: 3.0.1
+info:
+  title: Hackathon for FUN Backend API
+  version: 1.0.0
+
+servers:
+  - url: /
+
+paths:
+  /health:
+    get:
+      summary: 死活管理用
+      responses:
+        200:
+          description: alive
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Health"
+
+components:
+  schemas:
+    Health:
+      type: object
+      description: "死活管理用"
+      properties:
+        message:
+          type: string
+          example: server OK
