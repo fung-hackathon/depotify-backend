@@ -15,9 +15,9 @@ commit 前に必ず `go fmt` でフォーマットをかける
 - `dev`
   - 開発用ブランチ。latest。
 - `feature`
-  - 機能追加。devから分岐してdevにmergeする。`feature-{#issue}`
+  - 機能追加。devから分岐してdevにmergeする。`feature/{#issue}`
 - `fix`
-  - mainを修正するときに使用 `fix-{#issue}`
+  - mainを修正するときに使用 `fix/{#issue}`
 
 ### Commit Message
 
