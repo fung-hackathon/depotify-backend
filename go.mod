@@ -2,7 +2,10 @@ module funhackathon2022-backend
 
 go 1.19
 
-require github.com/labstack/echo v3.3.10+incompatible
+require (
+	github.com/joho/godotenv v1.4.0
+	github.com/labstack/echo v3.3.10+incompatible
+)
 
 require (
 	github.com/labstack/gommon v0.3.1 // indirect
