@@ -8,7 +8,7 @@ import (
 
 type Altitude float64
 
-func GetAltitude(coord Coordinates) (Altitude, error) {
+func GetAltitude(coord Coordinate) (Altitude, error) {
 	base := "https://map.yahooapis.jp/alt/V1/getAltitude"
 	appid := os.Getenv("YOLP_APPID")
 	output := "json"

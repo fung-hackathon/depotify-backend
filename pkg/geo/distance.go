@@ -8,7 +8,7 @@ import (
 
 type Distance float64
 
-func GetDistance(ca, cb Coordinates) (Distance, error) {
+func GetDistance(ca, cb Coordinate) (Distance, error) {
 	base := "https://map.yahooapis.jp/dist/V1/distance"
 	appid := os.Getenv("YOLP_APPID")
 	output := "json"
