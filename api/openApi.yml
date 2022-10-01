@@ -28,6 +28,18 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/UserID"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /score:
     post:
