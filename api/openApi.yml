@@ -18,6 +18,84 @@ paths:
               schema:
                 $ref: "#/components/schemas/Health"
 
+  /user:
+    post:
+      summary: userIDの登録・取得
+      responses:
+        200:
+          description: ユーザのuuid
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserID"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /score:
+    post:
+      summary: スコアの登録
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Coordinates"
+      responses:
+        200:
+          description: 登録成功
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Score"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          description: ユーザID
+          schema:
+            type: string
+      responses:
+        200:
+          description: スコアの取得
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Score"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     Health:
@@ -27,3 +105,43 @@ components:
         message:
           type: string
           example: server OK
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        description:
+          type: string
+
+    UserID:
+      type: object
+      properties:
+        userid:
+          type: string
+
+    Score:
+      type: object
+      properties:
+        userid:
+          type: string
+        score:
+          type: integer
+
+    Coordinate:
+      type: object
+      properties:
+        lat:
+          type: number
+          format: float
+          example: 140.766944
+        lng:
+          type: number
+          format: float
+          example: 41.841806
+
+    Coordinates:
+      type: array
+      items:
+        type: object
+        $ref: "#/components/schemas/Coordinate"
