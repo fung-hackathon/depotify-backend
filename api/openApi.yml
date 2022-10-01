@@ -29,6 +29,56 @@ paths:
               schema:
                 $ref: "#/components/schemas/UserID"
 
+  /score:
+    post:
+      summary: スコアの登録
+      responses:
+        200:
+          description: 登録成功
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Score"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          description: ユーザID
+          schema:
+            type: string
+      responses:
+        200:
+          description: スコアの取得
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Score"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     Health:
@@ -52,3 +102,11 @@ components:
       properties:
         userid:
           type: string
+
+    Score:
+      type: object
+      properties:
+        userid:
+          type: string
+        score:
+          type: integer
