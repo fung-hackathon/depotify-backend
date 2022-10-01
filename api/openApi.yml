@@ -18,6 +18,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/Health"
 
+  /user:
+    post:
+      summary: userIDの登録・取得
+      responses:
+        200:
+          description: ユーザのuuid
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserID"
+
 components:
   schemas:
     Health:
@@ -27,3 +38,17 @@ components:
         message:
           type: string
           example: server OK
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        description:
+          type: string
+
+    UserID:
+      type: object
+      properties:
+        userid:
+          type: string
