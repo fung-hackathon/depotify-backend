@@ -81,7 +81,6 @@ func TestGetDistance(t *testing.T) {
 			if math.Abs(float64(distance-tt.want)) > float64(ignorable) {
 				t.Errorf("GetDistance() = %f, want %f", distance, float64(tt.want))
 			}
-
 		})
 	}
 }

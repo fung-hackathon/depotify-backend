@@ -9,5 +9,6 @@ import (
 func GetRouter() *echo.Echo {
 	e := echo.New()
 	e.GET("/health", controller.GetHealth)
+	e.POST("/user", controller.GenerateUUID)
 	return e
 }
