@@ -9,11 +9,11 @@ import (
 )
 
 type (
-	UUID struct {
-		UUID string `json:"uuid"`
+	UserId struct {
+		UserId string `json:"userid"`
 	}
 )
 
 func GenerateUUID(c echo.Context) error {
-	return c.JSON(http.StatusOK, UUID{UUID: models.GenerateUUID()})
+	return c.JSON(http.StatusOK, UserId{UserId: models.GenerateUUID()})
 }
