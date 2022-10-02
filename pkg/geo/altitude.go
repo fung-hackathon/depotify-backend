@@ -2,15 +2,15 @@ package geo
 
 import (
 	"encoding/json"
+	"funhackathon2022-backend/pkg/config"
 	"net/http"
-	"os"
 )
 
 type Altitude float64
 
 func GetAltitude(coord Coordinate) (Altitude, error) {
 	base := "https://map.yahooapis.jp/alt/V1/getAltitude"
-	appid := os.Getenv("YOLP_APPID")
+	appid := config.YOLP_APPID
 	output := "json"
 
 	response, err :=
