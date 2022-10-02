@@ -48,7 +48,12 @@ paths:
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/Coordinates"
+              properties:
+                userid:
+                  type: string
+                coordinates:
+                  $ref: "#/components/schemas/Coordinates"
+
       responses:
         200:
           description: 登録成功
@@ -134,11 +139,11 @@ components:
         lat:
           type: number
           format: float
-          example: 140.766944
+          example: 41.841806
         lng:
           type: number
           format: float
-          example: 41.841806
+          example: 140.766944
 
     Coordinates:
       type: array
