@@ -2,15 +2,15 @@ package geo
 
 import (
 	"encoding/json"
+	"funhackathon2022-backend/pkg/config"
 	"net/http"
-	"os"
 )
 
 type Distance float64
 
 func GetDistance(ca, cb Coordinate) (Distance, error) {
 	base := "https://map.yahooapis.jp/dist/V1/distance"
-	appid := os.Getenv("YOLP_APPID")
+	appid := config.YOLP_APPID
 	output := "json"
 
 	response, err :=

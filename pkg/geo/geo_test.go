@@ -1,17 +1,9 @@
 package geo
 
 import (
-	"github.com/joho/godotenv"
 	"math"
 	"testing"
 )
-
-func init() {
-	err := godotenv.Load("./../../.env")
-	if err != nil {
-		panic(err)
-	}
-}
 
 func TestGetAltitude(t *testing.T) {
 
