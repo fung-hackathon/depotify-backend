@@ -1,6 +1,7 @@
 package geo
 
 import (
+	"funhackathon2022-backend/pkg/models"
 	"math"
 	"testing"
 )
@@ -11,13 +12,13 @@ func TestGetAltitude(t *testing.T) {
 
 	tests := []struct {
 		name   string
-		arg    Coordinate
+		arg    models.Coordinate
 		want   Altitude
 		hasErr bool
 	}{
 		{
 			name:   "はこだて未来大の標高(m)",
-			arg:    Coordinate{Longitude: 140.766944, Latitude: 41.841806},
+			arg:    models.Coordinate{Longitude: 140.766944, Latitude: 41.841806},
 			want:   Altitude(133.3),
 			hasErr: false,
 		},
@@ -43,7 +44,7 @@ func TestGetDistance(t *testing.T) {
 	ignorable := Distance(1e-5)
 
 	type args struct {
-		ca, cb Coordinate
+		ca, cb models.Coordinate
 	}
 
 	tests := []struct {
@@ -55,8 +56,8 @@ func TestGetDistance(t *testing.T) {
 		{
 			name: "はこだて未来大と函館市役所の距離(Km)",
 			arg: args{
-				ca: Coordinate{Longitude: 140.766944, Latitude: 41.841806},
-				cb: Coordinate{Longitude: 140.72892, Latitude: 41.76867},
+				ca: models.Coordinate{Longitude: 140.766944, Latitude: 41.841806},
+				cb: models.Coordinate{Longitude: 140.72892, Latitude: 41.76867},
 			},
 			want:   Distance(8.716124),
 			hasErr: false,
