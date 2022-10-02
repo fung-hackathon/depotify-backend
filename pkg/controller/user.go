@@ -8,12 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type (
-	UserId struct {
-		UserId string `json:"userid"`
-	}
-)
-
 func GenerateUUID(c echo.Context) error {
-	return c.JSON(http.StatusOK, UserId{UserId: models.GenerateUUID()})
+	return c.JSON(http.StatusOK, models.UserId{UserId: models.GenerateUUID()})
 }
