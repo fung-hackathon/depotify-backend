@@ -14,7 +14,7 @@ type (
 
 	Score struct {
 		UserId string `json:"userid"`
-		Score  int    `json:"score"`
+		Score  int64  `json:"score"`
 	}
 
 	UserId struct {

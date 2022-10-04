@@ -4,10 +4,15 @@ import (
 	"net/http"
 
 	"funhackathon2022-backend/pkg/models"
+	"funhackathon2022-backend/pkg/models/firestore"
 
 	"github.com/labstack/echo/v4"
 )
 
-func GenerateUUID(c echo.Context) error {
-	return c.JSON(http.StatusOK, models.UserId{UserId: models.GenerateUUID()})
+func RegisterUser(c echo.Context) error {
+	userid := models.UserId{UserId: models.GenerateUUID()}
+	firestore.Set(userid, map[string]interface{}{
+		"score": int64(0),
+	})
+	return c.JSON(http.StatusOK, userid)
 }

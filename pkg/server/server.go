@@ -2,15 +2,24 @@ package server
 
 import (
 	"funhackathon2022-backend/pkg/controller"
+	"funhackathon2022-backend/pkg/models/firestore"
+	"log"
 
 	"github.com/labstack/echo/v4"
 )
 
 func GetRouter() *echo.Echo {
 	e := echo.New()
+	if err := firestore.Initialize(); err != nil {
+		log.Fatalf(err.Error())
+	}
 	e.GET("/health", controller.GetHealth)
-	e.POST("/user", controller.GenerateUUID)
+	e.POST("/user", controller.RegisterUser)
 	e.GET("/score", controller.GetScore)
-	e.POST("/score", controller.ReceiveScore)
+	e.POST("/score", controller.UpdateScore)
 	return e
+}
+
+func Close() {
+	firestore.Close()
 }
