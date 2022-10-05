@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"funhackathon2022-backend/pkg/config"
-	"funhackathon2022-backend/pkg/models"
+	"funhackathon2022-backend/pkg/models/dto"
 	"log"
 
 	"cloud.google.com/go/firestore"
@@ -45,7 +45,7 @@ func Initialize() error {
 	return nil
 }
 
-func Set(userid models.UserId, c map[string]interface{}) error {
+func Set(userid dto.UserId, c map[string]interface{}) error {
 	if fs == nil {
 		return ErrFirestore
 	}
@@ -53,7 +53,7 @@ func Set(userid models.UserId, c map[string]interface{}) error {
 	return err
 }
 
-func Get(userid models.UserId) (map[string]interface{}, error) {
+func Get(userid dto.UserId) (map[string]interface{}, error) {
 	dsnap, err := fs.Client.Collection("users").Doc(userid.UserId).Get(fs.Context)
 	if err != nil {
 		return nil, err

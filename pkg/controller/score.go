@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"funhackathon2022-backend/pkg/models"
+	"funhackathon2022-backend/pkg/models/dto"
 	"funhackathon2022-backend/pkg/models/firestore"
 
 	"github.com/labstack/echo/v4"
@@ -14,7 +15,7 @@ var (
 	ErrUnregisteredID = errors.New("unregistered user ID")
 )
 
-func QueryScore(userid models.UserId) (int64, int, error) {
+func QueryScore(userid dto.UserId) (int64, int, error) {
 
 	obj, err := firestore.Get(userid)
 	if err != nil || obj == nil {
@@ -25,16 +26,16 @@ func QueryScore(userid models.UserId) (int64, int, error) {
 }
 
 func GetScore(c echo.Context) error {
-	var userid models.UserId
+	var userid dto.UserId
 
 	userid.UserId = c.QueryParam("userId")
 
 	sc, status, err := QueryScore(userid)
 	if err != nil {
-		return c.JSON(status, models.Error{status, err.Error()})
+		return c.JSON(status, dto.Error{status, err.Error()})
 	}
 
-	score := new(models.Score)
+	score := new(dto.Score)
 	score.UserId = userid.UserId
 	score.Score = sc
 
@@ -42,23 +43,36 @@ func GetScore(c echo.Context) error {
 }
 
 func UpdateScore(c echo.Context) error {
-	var coords models.Coordinates
+	var coords dto.Coordinates
 
 	err := c.Bind(&coords)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, models.Error{http.StatusInternalServerError, err.Error()})
+		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
 	}
 
-	// UUIDが登録済みであるかを判定 or 400
-	sc, status, err := QueryScore(models.UserId{UserId: coords.UserId})
+	userid := dto.UserId{UserId: coords.UserId}
+
+	currentScore, status, err := QueryScore(userid)
 	if err != nil {
-		return c.JSON(status, models.Error{status, err.Error()})
+		return c.JSON(status, dto.Error{status, err.Error()})
 	}
 
-	score := new(models.Score)
+	incScore, err := models.CalculateScore(coords)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
+	}
+
+	newScore := currentScore + incScore
+
+	firestore.Set(userid, map[string]interface{}{
+		"score": newScore,
+	})
+
+	score := new(dto.Score)
 	score.UserId = coords.UserId
-	score.Score = sc + models.CalculateScore(coords)
+
+	score.Score = newScore
 
 	return c.JSON(http.StatusOK, score)
 }
