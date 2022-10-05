@@ -1,7 +1,7 @@
 package geo
 
 import (
-	"funhackathon2022-backend/pkg/models"
+	"funhackathon2022-backend/pkg/models/dto"
 	"math"
 	"testing"
 )
@@ -12,13 +12,13 @@ func TestGetAltitude(t *testing.T) {
 
 	tests := []struct {
 		name   string
-		arg    models.Coordinate
+		arg    dto.Coordinate
 		want   Altitude
 		hasErr bool
 	}{
 		{
 			name:   "はこだて未来大の標高(m)",
-			arg:    models.Coordinate{Longitude: 140.766944, Latitude: 41.841806},
+			arg:    dto.Coordinate{Longitude: 140.766944, Latitude: 41.841806},
 			want:   Altitude(133.3),
 			hasErr: false,
 		},
@@ -26,7 +26,7 @@ func TestGetAltitude(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			altitude, err := GetAltitude(tt.arg)
+			altitude, err := GetAltitudeM(tt.arg)
 
 			if (err != nil) != tt.hasErr {
 				t.Errorf("GetAltitude() error = %v, hasErr %v", err, tt.hasErr)
@@ -44,7 +44,7 @@ func TestGetDistance(t *testing.T) {
 	ignorable := Distance(1e-5)
 
 	type args struct {
-		ca, cb models.Coordinate
+		ca, cb dto.Coordinate
 	}
 
 	tests := []struct {
@@ -56,8 +56,8 @@ func TestGetDistance(t *testing.T) {
 		{
 			name: "はこだて未来大と函館市役所の距離(Km)",
 			arg: args{
-				ca: models.Coordinate{Longitude: 140.766944, Latitude: 41.841806},
-				cb: models.Coordinate{Longitude: 140.72892, Latitude: 41.76867},
+				ca: dto.Coordinate{Longitude: 140.766944, Latitude: 41.841806},
+				cb: dto.Coordinate{Longitude: 140.72892, Latitude: 41.76867},
 			},
 			want:   Distance(8.716124),
 			hasErr: false,
@@ -66,7 +66,7 @@ func TestGetDistance(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			distance, err := GetDistance(tt.arg.ca, tt.arg.cb)
+			distance, err := GetDistanceM(tt.arg.ca, tt.arg.cb)
 
 			if (err != nil) != tt.hasErr {
 				t.Errorf("GetDistance() error = %v, hasErr %v", err, tt.hasErr)

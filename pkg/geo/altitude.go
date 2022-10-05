@@ -3,13 +3,13 @@ package geo
 import (
 	"encoding/json"
 	"funhackathon2022-backend/pkg/config"
-	"funhackathon2022-backend/pkg/models"
+	"funhackathon2022-backend/pkg/models/dto"
 	"net/http"
 )
 
 type Altitude float64
 
-func GetAltitude(coord models.Coordinate) (Altitude, error) {
+func GetAltitudeM(coord dto.Coordinate) (Altitude, error) {
 	base := "https://map.yahooapis.jp/alt/V1/getAltitude"
 	appid := config.YOLP_APPID
 	output := "json"
