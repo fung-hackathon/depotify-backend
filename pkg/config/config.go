@@ -1,14 +1,7 @@
 package config
 
 import (
-	"errors"
 	"os"
-
-	"github.com/joho/godotenv"
-)
-
-var (
-	ErrGodotenv = errors.New("faild to load .env file")
 )
 
 var (
@@ -17,10 +10,6 @@ var (
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
 	YOLP_APPID = os.Getenv("YOLP_APPID")
 	GOOGLE_APPLICATION_CREDENTIALS = os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
 }
