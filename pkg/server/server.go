@@ -2,15 +2,23 @@ package server
 
 import (
 	"funhackathon2022-backend/pkg/controller"
+	"funhackathon2022-backend/pkg/logger"
 	"funhackathon2022-backend/pkg/models/firestore"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 func GetRouter() *echo.Echo {
 	e := echo.New()
+	e.Use(logger.EchoLogger())
+
 	if err := firestore.Initialize(); err != nil {
-		panic(err)
+		logger.Log{
+			Code:    http.StatusInternalServerError,
+			Message: "failed to connect to firestore",
+			Cause:   err,
+		}.Err()
 	}
 
 	e.GET("/health", controller.GetHealth)
