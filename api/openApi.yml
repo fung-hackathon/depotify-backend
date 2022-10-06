@@ -42,21 +42,17 @@ paths:
                 $ref: "#/components/schemas/Error"
 
   /score:
-    post:
-      summary: スコアの登録
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              properties:
-                userid:
-                  type: string
-                coordinates:
-                  $ref: "#/components/schemas/Coordinates"
-
+    get:
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          description: ユーザID
+          schema:
+            type: string
       responses:
         200:
-          description: 登録成功
+          description: スコアの取得
           content:
             "application/json":
               schema:
@@ -73,6 +69,8 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /arrive:
     get:
       parameters:
         - in: query
@@ -81,13 +79,74 @@ paths:
           description: ユーザID
           schema:
             type: string
+        - in: query
+          name: olat
+          required: true
+          description: 出発点の座標のlat
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: olng
+          required: true
+          description: 出発点の座標のlng
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: dlat
+          required: true
+          description: 到着点の座標のlat
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: dlng
+          required: true
+          description: 到着点の座標のlng
+          schema:
+            type: number
+            format: float
+
       responses:
-        200:
-          description: スコアの取得
+        302:
+          description: 処理成功、そのあとWebフロントへリダイレクト
+        400:
+          description: ユーザからの入力おかしい
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/Score"
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+  /emotion:
+    post:
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                userid:
+                  type: string
+                emotion:
+                  $ref: "#/components/schemas/Emoji"
+      responses:
+        200:
+          description: 成功
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: string
+                  emotion:
+                    $ref: "#/components/schemas/Emoji"
         400:
           description: ユーザからの入力おかしい
           content:
@@ -150,3 +209,9 @@ components:
       items:
         type: object
         $ref: "#/components/schemas/Coordinate"
+
+    Emoji:
+      type: array
+      items:
+        type: string
+        example: heart
