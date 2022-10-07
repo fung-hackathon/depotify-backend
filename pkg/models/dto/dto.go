@@ -30,6 +30,11 @@ type (
 		UserId      string       `json:"userid"`
 		Coordinates []Coordinate `json:"coordinates"`
 	}
+
+	Emotion struct {
+		UserId  string   `json:"userid"`
+		Emotion []string `json:"emotion"`
+	}
 )
 
 func (coord *Coordinate) ToString() string {

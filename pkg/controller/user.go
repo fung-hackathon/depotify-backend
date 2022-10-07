@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"funhackathon2022-backend/pkg/config"
 	"funhackathon2022-backend/pkg/logger"
 	"funhackathon2022-backend/pkg/models"
 	"funhackathon2022-backend/pkg/models/dto"
@@ -14,7 +15,8 @@ import (
 func RegisterUser(c echo.Context) error {
 	userid := dto.UserId{UserId: models.GenerateUUID()}
 	firestore.Set(userid, map[string]interface{}{
-		"score": int64(0),
+		"score":   int64(0),
+		"emotion": make([]string, config.EMOTION_QUEUE_MAX_SIZE),
 	})
 	logger.Log{
 		Code:    http.StatusOK,
