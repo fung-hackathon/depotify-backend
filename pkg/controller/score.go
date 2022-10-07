@@ -1,37 +1,20 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 
 	"funhackathon2022-backend/pkg/logger"
-	"funhackathon2022-backend/pkg/models"
 	"funhackathon2022-backend/pkg/models/dto"
-	"funhackathon2022-backend/pkg/models/firestore"
 
 	"github.com/labstack/echo/v4"
 )
-
-var (
-	ErrUnregisteredID = errors.New("unregistered user ID")
-)
-
-func QueryScore(userid dto.UserId) (int64, int, error) {
-
-	obj, err := firestore.Get(userid)
-	if err != nil || obj == nil {
-		return 0, http.StatusBadRequest, ErrUnregisteredID
-	}
-
-	return obj["score"].(int64), http.StatusOK, nil
-}
 
 func GetScore(c echo.Context) error {
 	var userid dto.UserId
 
 	userid.UserId = c.QueryParam("userId")
 
-	sc, status, err := QueryScore(userid)
+	sc, status, err := queryScore(userid)
 	if err != nil {
 		logger.Log{
 			Code:    status,
@@ -53,6 +36,7 @@ func GetScore(c echo.Context) error {
 	return c.JSON(http.StatusOK, score)
 }
 
+/*
 func UpdateScore(c echo.Context) error {
 	var coords dto.Coordinates
 
@@ -106,3 +90,5 @@ func UpdateScore(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, score)
 }
+
+*/
