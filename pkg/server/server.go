@@ -24,7 +24,6 @@ func GetRouter() *echo.Echo {
 	e.GET("/health", controller.GetHealth)
 	e.POST("/user", controller.RegisterUser)
 	e.GET("/score", controller.GetScore)
-	//e.POST("/score", controller.UpdateScore)
 	e.GET("/emotion", controller.GetEmotion)
 	e.POST("/emotion", controller.UpdateEmotion)
 	e.GET("/arrive", controller.CheckArrival)

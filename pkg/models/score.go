@@ -27,21 +27,3 @@ func CalculateScore(ca, cb dto.Coordinate) (int64, error) {
 
 	return int64(float64(distance)/10. + math.Abs(float64(altitude_a)-float64(altitude_b))), nil
 }
-
-/*
-func CalculateScore(coords dto.Coordinates) (int64, error) {
-
-	var sum int64 = 0
-
-	for i := 1; i < len(coords.Coordinates); i++ {
-
-		sc, err := calculateScoreByCoordinatePair(coords.Coordinates[i-1], coords.Coordinates[i])
-		if err != nil {
-			return 0, err
-		}
-		sum += sc
-	}
-
-	return sum, nil
-}
-*/

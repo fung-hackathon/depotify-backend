@@ -9,7 +9,6 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go/v4"
-	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
 
@@ -72,44 +71,6 @@ func Get(userid dto.UserId) (map[string]interface{}, error) {
 	c := dsnap.Data()
 
 	return c, nil
-}
-
-func CheckAll() error {
-
-	iter := fs.Client.Collection("users").Documents(fs.Context)
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-		if err != nil {
-			return err
-		}
-		log.Printf(doc.Ref.ID)
-		log.Println(doc.Data())
-	}
-
-	return nil
-}
-
-func DeleteAll() error {
-
-	iter := fs.Client.Collection("users").Documents(fs.Context)
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-		if err != nil {
-			return err
-		}
-		_, err = fs.Client.Collection("users").Doc(doc.Ref.ID).Delete(fs.Context)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func Close() {
