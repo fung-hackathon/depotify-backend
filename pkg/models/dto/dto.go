@@ -23,12 +23,6 @@ type (
 		Latitude  string `json:"lat"`
 		Longitude string `json:"lng"`
 	}
-	/*
-		Coordinates struct {
-			UserId      string       `json:"userid"`
-			Coordinates []Coordinate `json:"coordinates"`
-		}
-	*/
 
 	Emotion struct {
 		UserId  string   `json:"userid"`

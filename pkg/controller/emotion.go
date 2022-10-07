@@ -11,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func QueryEmotion(userid dto.UserId) ([]string, int, error) {
+func queryEmotion(userid dto.UserId) ([]string, int, error) {
 
 	obj, err := firestore.Get(userid)
 	if err != nil || obj == nil {
@@ -33,7 +33,7 @@ func GetEmotion(c echo.Context) error {
 
 	userid.UserId = c.QueryParam("userId")
 
-	em, status, err := QueryEmotion(userid)
+	em, status, err := queryEmotion(userid)
 	if err != nil {
 		logger.Log{
 			Code:    status,
@@ -51,11 +51,22 @@ func GetEmotion(c echo.Context) error {
 }
 
 func UpdateEmotion(c echo.Context) error {
-	var userid dto.UserId
 
-	userid.UserId = c.QueryParam("userId")
+	var ems dto.Emotion
 
-	currentEmotion, status, err := QueryEmotion(userid)
+	err := c.Bind(&ems)
+	if err != nil {
+		logger.Log{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+			Cause:   err,
+		}.Err()
+		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
+	}
+
+	userid := dto.UserId{UserId: ems.UserId}
+
+	currentEmotion, status, err := queryEmotion(userid)
 	if err != nil {
 		logger.Log{
 			Code:    status,
@@ -65,14 +76,14 @@ func UpdateEmotion(c echo.Context) error {
 		return c.JSON(status, dto.Error{status, err.Error()})
 	}
 
-	newEmotion := append([]string{c.QueryParam("emotion")}, currentEmotion...)
+	newEmotion := append(ems.Emotion, currentEmotion...)
 
 	if len(newEmotion) > int(config.EMOTION_QUEUE_MAX_SIZE) {
 		newEmotion = newEmotion[:config.EMOTION_QUEUE_MAX_SIZE]
 	}
 
 	emotion := new(dto.Emotion)
-	emotion.UserId = userid.UserId
+	emotion.UserId = ems.UserId
 
 	emotion.Emotion = newEmotion
 
