@@ -67,6 +67,8 @@ func CheckArrival(c echo.Context) error {
 
 	score.Score = newScore
 
+	// Redirectを挿入
+
 	logger.Log{
 		Code:    http.StatusOK,
 		Message: "success to update score",
