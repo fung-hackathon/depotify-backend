@@ -1,7 +1,5 @@
 package dto
 
-import "strconv"
-
 type (
 	Health struct {
 		Message string `json:"message"`
@@ -22,17 +20,16 @@ type (
 	}
 
 	Coordinate struct {
-		Latitude  float64 `json:"lat"`
-		Longitude float64 `json:"lng"`
+		Latitude  string `json:"lat"`
+		Longitude string `json:"lng"`
 	}
 
-	Coordinates struct {
-		UserId      string       `json:"userid"`
-		Coordinates []Coordinate `json:"coordinates"`
+	Emotion struct {
+		UserId  string   `json:"userid"`
+		Emotion []string `json:"emotion"`
 	}
 )
 
 func (coord *Coordinate) ToString() string {
-	decimals := 8
-	return strconv.FormatFloat(coord.Longitude, 'f', decimals, 64) + "," + strconv.FormatFloat(coord.Latitude, 'f', decimals, 64)
+	return coord.Longitude + "," + coord.Latitude
 }
