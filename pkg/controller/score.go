@@ -91,9 +91,7 @@ func UpdateScore(c echo.Context) error {
 
 	newScore := currentScore + incScore
 
-	firestore.Set(userid, map[string]interface{}{
-		"score": newScore,
-	})
+	firestore.Update(userid, "score", newScore)
 
 	score := new(dto.Score)
 	score.UserId = coords.UserId
@@ -105,5 +103,6 @@ func UpdateScore(c echo.Context) error {
 		Message: "success to update score",
 		Cause:   nil,
 	}.Info()
+
 	return c.JSON(http.StatusOK, score)
 }

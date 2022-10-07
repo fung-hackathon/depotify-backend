@@ -53,6 +53,17 @@ func Set(userid dto.UserId, c map[string]interface{}) error {
 	return err
 }
 
+func Update(userid dto.UserId, path string, value interface{}) error {
+	if fs == nil {
+		return ErrFirestore
+	}
+	_, err := fs.Client.Collection("users").Doc(userid.UserId).Update(fs.Context, []firestore.Update{{
+		Path:  path,
+		Value: value,
+	}})
+	return err
+}
+
 func Get(userid dto.UserId) (map[string]interface{}, error) {
 	dsnap, err := fs.Client.Collection("users").Doc(userid.UserId).Get(fs.Context)
 	if err != nil {

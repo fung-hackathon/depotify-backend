@@ -76,9 +76,7 @@ func UpdateEmotion(c echo.Context) error {
 
 	emotion.Emotion = newEmotion
 
-	firestore.Set(userid, map[string]interface{}{
-		"emotion": newEmotion,
-	})
+	firestore.Update(userid, "emotion", newEmotion)
 
 	logger.Log{
 		Code:    http.StatusOK,

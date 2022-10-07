@@ -16,7 +16,7 @@ func RegisterUser(c echo.Context) error {
 	userid := dto.UserId{UserId: models.GenerateUUID()}
 	firestore.Set(userid, map[string]interface{}{
 		"score":   int64(0),
-		"emotion": make([]string, config.EMOTION_QUEUE_MAX_SIZE),
+		"emotion": make([]string, 0, config.EMOTION_QUEUE_MAX_SIZE),
 	})
 	logger.Log{
 		Code:    http.StatusOK,
