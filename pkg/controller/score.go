@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"funhackathon2022-backend/pkg/logger"
 	"funhackathon2022-backend/pkg/models"
 	"funhackathon2022-backend/pkg/models/dto"
 	"funhackathon2022-backend/pkg/models/firestore"
@@ -32,6 +33,11 @@ func GetScore(c echo.Context) error {
 
 	sc, status, err := QueryScore(userid)
 	if err != nil {
+		logger.Log{
+			Code:    status,
+			Message: err.Error(),
+			Cause:   err,
+		}.Warn()
 		return c.JSON(status, dto.Error{status, err.Error()})
 	}
 
@@ -39,6 +45,11 @@ func GetScore(c echo.Context) error {
 	score.UserId = userid.UserId
 	score.Score = sc
 
+	logger.Log{
+		Code:    status,
+		Message: "success to get score",
+		Cause:   nil,
+	}.Info()
 	return c.JSON(http.StatusOK, score)
 }
 
@@ -48,6 +59,11 @@ func UpdateScore(c echo.Context) error {
 	err := c.Bind(&coords)
 
 	if err != nil {
+		logger.Log{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+			Cause:   err,
+		}.Err()
 		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
 	}
 
@@ -55,11 +71,21 @@ func UpdateScore(c echo.Context) error {
 
 	currentScore, status, err := QueryScore(userid)
 	if err != nil {
+		logger.Log{
+			Code:    status,
+			Message: err.Error(),
+			Cause:   err,
+		}.Warn()
 		return c.JSON(status, dto.Error{status, err.Error()})
 	}
 
 	incScore, err := models.CalculateScore(coords)
 	if err != nil {
+		logger.Log{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+			Cause:   err,
+		}.Err()
 		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
 	}
 
@@ -74,5 +100,10 @@ func UpdateScore(c echo.Context) error {
 
 	score.Score = newScore
 
+	logger.Log{
+		Code:    http.StatusOK,
+		Message: "success to update score",
+		Cause:   nil,
+	}.Info()
 	return c.JSON(http.StatusOK, score)
 }
