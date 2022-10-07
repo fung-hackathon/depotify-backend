@@ -1,0 +1,249 @@
+openapi: 3.0.1
+info:
+  title: Hackathon for FUN Backend API
+  version: 1.0.0
+
+servers:
+  - url: /
+
+paths:
+  /health:
+    get:
+      summary: 死活管理用
+      responses:
+        200:
+          description: alive
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Health"
+
+  /user:
+    post:
+      summary: userIDの登録・取得
+      responses:
+        200:
+          description: ユーザのuuid
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserID"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /score:
+    get:
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          description: ユーザID
+          schema:
+            type: string
+      responses:
+        200:
+          description: スコアの取得
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Score"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /arrive:
+    get:
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          description: ユーザID
+          schema:
+            type: string
+        - in: query
+          name: olat
+          required: true
+          description: 出発点の座標のlat
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: olng
+          required: true
+          description: 出発点の座標のlng
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: dlat
+          required: true
+          description: 到着点の座標のlat
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: dlng
+          required: true
+          description: 到着点の座標のlng
+          schema:
+            type: number
+            format: float
+
+      responses:
+        302:
+          description: 処理成功、そのあとWebフロントへリダイレクト
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+  /emotion:
+    get:
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          description: ユーザID
+          schema:
+            type: string
+      responses:
+        200:
+          description: 成功
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: string
+                  emotion:
+                    $ref: "#/components/schemas/Emoji"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                userid:
+                  type: string
+                emotion:
+                  $ref: "#/components/schemas/Emoji"
+      responses:
+        200:
+          description: 成功
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: string
+                  emotion:
+                    $ref: "#/components/schemas/Emoji"
+        400:
+          description: ユーザからの入力おかしい
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: サーバ側のエラー
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Health:
+      type: object
+      description: "死活管理用"
+      properties:
+        message:
+          type: string
+          example: server OK
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        description:
+          type: string
+
+    UserID:
+      type: object
+      properties:
+        userid:
+          type: string
+
+    Score:
+      type: object
+      properties:
+        userid:
+          type: string
+        score:
+          type: integer
+
+    Coordinate:
+      type: object
+      properties:
+        lat:
+          type: number
+          format: float
+          example: 41.841806
+        lng:
+          type: number
+          format: float
+          example: 140.766944
+
+    Coordinates:
+      type: array
+      items:
+        type: object
+        $ref: "#/components/schemas/Coordinate"
+
+    Emoji:
+      type: array
+      items:
+        type: string
+        example: heart
