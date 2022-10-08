@@ -22,7 +22,7 @@ func queryEmotion(userid dto.UserId) ([]string, int, error) {
 		return nil, http.StatusBadRequest, ErrUnregisteredID
 	}
 
-	if obj["emotion"] != nil {
+	if obj["emotion"] == nil {
 		return nil, http.StatusInternalServerError, err
 	}
 
