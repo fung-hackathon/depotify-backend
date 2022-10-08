@@ -27,7 +27,7 @@ func queryScore(userid dto.UserId) (int64, int, error) {
 		return 0, http.StatusBadRequest, ErrUnregisteredID
 	}
 
-	if obj["score"] != nil {
+	if obj["score"] == nil {
 		return 0, http.StatusInternalServerError, err
 	}
 
