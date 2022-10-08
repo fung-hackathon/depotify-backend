@@ -12,7 +12,7 @@ import (
 func GetScore(c echo.Context) error {
 	var userid dto.UserId
 
-	userid.UserId = c.QueryParam("userId")
+	userid.UserId = c.QueryParam("userid")
 
 	sc, status, err := queryScore(userid)
 	if err != nil {
