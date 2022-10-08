@@ -14,8 +14,16 @@ import (
 func queryEmotion(userid dto.UserId) ([]string, int, error) {
 
 	obj, err := firestore.Get(userid)
-	if err != nil || obj == nil {
+	if err != nil {
+		return nil, http.StatusInternalServerError, err
+	}
+
+	if obj == nil {
 		return nil, http.StatusBadRequest, ErrUnregisteredID
+	}
+
+	if obj["emotion"] == nil {
+		return nil, http.StatusInternalServerError, err
 	}
 
 	eobj := obj["emotion"].([]interface{})
@@ -31,7 +39,7 @@ func queryEmotion(userid dto.UserId) ([]string, int, error) {
 func GetEmotion(c echo.Context) error {
 	var userid dto.UserId
 
-	userid.UserId = c.QueryParam("userId")
+	userid.UserId = c.QueryParam("userid")
 
 	em, status, err := queryEmotion(userid)
 	if err != nil {
@@ -87,7 +95,15 @@ func UpdateEmotion(c echo.Context) error {
 
 	emotion.Emotion = newEmotion
 
-	firestore.Update(userid, "emotion", newEmotion)
+	err = firestore.Update(userid, "emotion", newEmotion)
+	if err != nil {
+		logger.Log{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+			Cause:   err,
+		}.Err()
+		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
+	}
 
 	logger.Log{
 		Code:    http.StatusOK,
