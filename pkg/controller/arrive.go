@@ -38,7 +38,7 @@ func CheckArrival(c echo.Context) error {
 
 	var userid dto.UserId
 
-	userid.UserId = c.QueryParam("userId")
+	userid.UserId = c.QueryParam("userid")
 
 	currentScore, status, err := queryScore(userid)
 	if err != nil {
