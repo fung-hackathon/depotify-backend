@@ -39,7 +39,7 @@ func queryEmotion(userid dto.UserId) ([]string, int, error) {
 func GetEmotion(c echo.Context) error {
 	var userid dto.UserId
 
-	userid.UserId = c.QueryParam("userId")
+	userid.UserId = c.QueryParam("userid")
 
 	em, status, err := queryEmotion(userid)
 	if err != nil {
