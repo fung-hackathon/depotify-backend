@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"funhackathon2022-backend/pkg/config"
 	"funhackathon2022-backend/pkg/logger"
 	"funhackathon2022-backend/pkg/models"
 	"funhackathon2022-backend/pkg/models/dto"
@@ -18,8 +19,16 @@ var (
 func queryScore(userid dto.UserId) (int64, int, error) {
 
 	obj, err := firestore.Get(userid)
-	if err != nil || obj == nil {
+	if err != nil {
+		return 0, http.StatusInternalServerError, err
+	}
+
+	if obj == nil {
 		return 0, http.StatusBadRequest, ErrUnregisteredID
+	}
+
+	if obj["score"] != nil {
+		return 0, http.StatusInternalServerError, err
 	}
 
 	return obj["score"].(int64), http.StatusOK, nil
@@ -60,14 +69,16 @@ func CheckArrival(c echo.Context) error {
 
 	newScore := currentScore + incScore
 
-	firestore.Update(userid, "score", newScore)
+	err = firestore.Update(userid, "score", newScore)
 
-	score := new(dto.Score)
-	score.UserId = userid.UserId
-
-	score.Score = newScore
-
-	// Redirectを挿入
+	if err != nil {
+		logger.Log{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+			Cause:   err,
+		}.Err()
+		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
+	}
 
 	logger.Log{
 		Code:    http.StatusOK,
@@ -75,5 +86,5 @@ func CheckArrival(c echo.Context) error {
 		Cause:   nil,
 	}.Info()
 
-	return c.JSON(http.StatusOK, score)
+	return c.Redirect(http.StatusFound, config.ARRIVAL_REDIRECT_URL)
 }

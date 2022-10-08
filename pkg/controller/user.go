@@ -14,10 +14,20 @@ import (
 
 func RegisterUser(c echo.Context) error {
 	userid := dto.UserId{UserId: models.GenerateUUID()}
-	firestore.Set(userid, map[string]interface{}{
+	err := firestore.Set(userid, map[string]interface{}{
 		"score":   int64(0),
 		"emotion": make([]string, 0, config.EMOTION_QUEUE_MAX_SIZE),
 	})
+
+	if err != nil {
+		logger.Log{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+			Cause:   err,
+		}.Err()
+		return c.JSON(http.StatusInternalServerError, dto.Error{http.StatusInternalServerError, err.Error()})
+	}
+
 	logger.Log{
 		Code:    http.StatusOK,
 		Message: "success to register user",
