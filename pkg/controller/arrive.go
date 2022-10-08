@@ -86,5 +86,5 @@ func CheckArrival(c echo.Context) error {
 		Cause:   nil,
 	}.Info()
 
-	return c.Redirect(http.StatusFound, config.ARRIVAL_REDIRECT_URL)
+	return c.Redirect(http.StatusFound, config.ARRIVAL_REDIRECT_URL+"?userid="+userid.UserId)
 }
