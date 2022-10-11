@@ -1,4 +1,4 @@
-# Hackathon for FUN 2022 backend
+# depotify-backend
 
 Hackathon for FUN 2022 バックエンド用の repository です。
 
